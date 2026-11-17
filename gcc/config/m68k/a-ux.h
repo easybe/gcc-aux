@@ -101,6 +101,12 @@ crt2.o%s "
 #define CTOR_LISTS_DEFINED_EXTERNALLY
 #endif
 
+/* The A/UX start files do not provide __EH_FRAME_BEGIN__, which __main
+   in libgcc2 references once EH_FRAME_SECTION_NAME is defined.  Keep the
+   unwind tables in the data section instead, as for targets without
+   crtstuff.  */
+#define EH_FRAME_IN_DATA_SECTION
+
 
 /*======================================================================*/
 /* Calling convention and library support changes */
