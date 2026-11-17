@@ -8,7 +8,7 @@ FIXPROTO_DEFINES=-D_POSIX_SOURCE
 # LDFLAGS=-static
 
 # Make sure we get the right assembler by letting gcc choose
-AS = $(GCC_FOR_TARGET) -xassembler-with-cpp -D__ASSEMBLY__ $(INCLUDES) -c
+AUX_AS = $(GCC_FOR_TARGET) -xassembler-with-cpp -D__ASSEMBLY__ $(INCLUDES) -c
 
 aux-mcount.c: $(srcdir)/config/m68k/aux-mcount.c
 	cp $(srcdir)/config/m68k/aux-mcount.c aux-mcount.c
@@ -29,10 +29,10 @@ maccrt1.o: $(srcdir)/config/m68k/aux-crt1.c $(GCC_PASSES)
 	  -fno-omit-frame-pointer -DMACCRT1 $(srcdir)/config/m68k/aux-crt1.c
 
 crt2.o: $(srcdir)/config/m68k/aux-crt2.asm $(GCC_PASSES)
-	$(AS) -o crt2.o $(srcdir)/config/m68k/aux-crt2.asm
+	$(AUX_AS) -o crt2.o $(srcdir)/config/m68k/aux-crt2.asm
 
 crtn.o: $(srcdir)/config/m68k/aux-crtn.asm $(GCC_PASSES)
-	$(AS) -o crtn.o $(srcdir)/config/m68k/aux-crtn.asm
+	$(AUX_AS) -o crtn.o $(srcdir)/config/m68k/aux-crtn.asm
 
 low.gld: $(srcdir)/config/m68k/aux-low.gld
 	sed -e 's|@libdir@|$(libdir)|' -e 's|@tooldir@|$(tooldir)|' \
