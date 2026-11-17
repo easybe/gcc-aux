@@ -35,7 +35,6 @@ Boston, MA 02111-1307, USA.  */
 %{!mc68000:%{!m68000:-Acpu=mc68020 -D__mc68020__ %{!ansi:-Dmc68020 }}}\
 %{m68030:-Acpu=mc68030 -D__mc68030__ %{!ansi:-Dmc68030 }}\
 %{m68040:-Acpu=mc68040 -D__mc68040__ %{!ansi:-Dmc68040 }}\
-%{!ansi:%{!traditional:-D__STDC__=2 }}\
 %{sbsd:-D_BSD_SOURCE -DBSD }%{ZB:-D_BSD_SOURCE -DBSD }\
 %{ssysv:-D_SYSV_SOURCE -DSYSV -DUSG }%{ZS:-D_SYSV_SOURCE -DSYSV -DUSG }\
 %{sposix:-D_POSIX_SOURCE -DPOSIX }%{ZP:-D_POSIX_SOURCE -DPOSIX }\
@@ -43,6 +42,12 @@ Boston, MA 02111-1307, USA.  */
 %{saux:-D_AUX_SOURCE }%{ZA:-D_AUX_SOURCE }\
 %{!sbsd:%{!ZB:%{!ssysv:%{!ZS:%{!sposix:%{!ZP:%{!snone:\
 -D_BSD_SOURCE -D_SYSV_SOURCE -D_AUX_SOURCE }}}}}}}"
+
+/* The A/UX headers hide their extensions unless __STDC__ is 0, the value
+   of the native cc in its default mode.  Redefining __STDC__ with -D
+   would make cpp warn on every run, which autoconf takes for a failed
+   header check.  */
+#define STDC_0_IN_SYSTEM_HEADERS 1
 
 #define LIB_SPEC \
 "%{sbsd:-lbsd }%{ZB:-lbsd }\
