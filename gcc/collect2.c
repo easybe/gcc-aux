@@ -2673,6 +2673,11 @@ scan_libraries (prog_name)
 
 #else
 
+/* aix64_flag only exists where the AIX export list support is built.  */
+#ifndef COLLECT_EXPORT_LIST
+#   define aix64_flag 0
+#endif
+
 #   define GCC_SYMBOLS(X)	(HEADER(ldptr).f_nsyms)
 #   define GCC_SYMENT		SYMENT
 #   define GCC_OK_SYMBOL(X) \
@@ -2687,7 +2692,12 @@ scan_libraries (prog_name)
 #   define GCC_SYMZERO(X)	0
 
 /* 0757 = U803XTOCMAGIC (AIX 4.3) and 0767 = U64_TOCMAGIC (AIX V5) */
-#ifdef _AIX51
+#ifndef U802TOCMAGIC
+/* Plain COFF, such as A/UX.  The magic number has already been checked
+   with MY_ISCOFF, and there is no 64-bit variant to tell apart.  */
+#   define GCC_CHECK_HDR(X) \
+     (HEADER (X).f_nsyms != 0)
+#elif defined (_AIX51)
 #   define GCC_CHECK_HDR(X) \
      ((HEADER (X).f_magic == U802TOCMAGIC && ! aix64_flag) \
       || (HEADER (X).f_magic == 0767 && aix64_flag))
